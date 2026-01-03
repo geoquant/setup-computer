@@ -1,0 +1,7 @@
+[user]
+	name = Jonnie Lappen
+	email = jonnie.lappen@gmail.com
+[init]
+	defaultBranch = main
+[core]
+	editor = nvim
