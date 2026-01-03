@@ -260,7 +260,26 @@ install_node() {
 }
 
 # ============================================================================
-# 10. NEOVIM CONFIG (KICKSTART)
+# 10. GHOSTTY CONFIG
+# ============================================================================
+setup_ghostty() {
+    log_info "Setting up Ghostty config..."
+
+    GHOSTTY_CONFIG="$HOME/.config/ghostty"
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+    mkdir -p "$GHOSTTY_CONFIG"
+
+    if [[ -f "$SCRIPT_DIR/.config/ghostty/config" ]]; then
+        cp "$SCRIPT_DIR/.config/ghostty/config" "$GHOSTTY_CONFIG/config"
+        log_success "Ghostty config installed"
+    else
+        log_warn "Ghostty config not found in repo"
+    fi
+}
+
+# ============================================================================
+# 12. NEOVIM CONFIG (KICKSTART)
 # ============================================================================
 setup_neovim() {
     log_info "Setting up Neovim with Kickstart..."
@@ -300,7 +319,7 @@ EOF
 }
 
 # ============================================================================
-# 11. BUN
+# 13. BUN
 # ============================================================================
 install_bun() {
     log_info "Installing Bun..."
@@ -314,7 +333,7 @@ install_bun() {
 }
 
 # ============================================================================
-# 12. AI TOOLS
+# 14. AI TOOLS
 # ============================================================================
 install_ai_tools() {
     log_info "Installing AI tools..."
@@ -345,7 +364,7 @@ install_ai_tools() {
 }
 
 # ============================================================================
-# 13. DOTFILES BARE REPO
+# 15. DOTFILES BARE REPO
 # ============================================================================
 setup_dotfiles_repo() {
     log_info "Setting up dotfiles bare repo..."
@@ -379,6 +398,7 @@ main() {
     install_oh_my_zsh
     configure_zshrc
     install_node
+    setup_ghostty
     install_bun
     setup_neovim
     install_ai_tools
