@@ -69,7 +69,6 @@ install_brew_packages() {
         gh
         nvm
         pnpm
-        bun
         ni
         fzf
         zoxide
@@ -192,6 +191,21 @@ configure_zshrc() {
         cp "$ZSHRC" "$ZSHRC.backup.$(date +%Y%m%d%H%M%S)"
     fi
 
+    # PATH configuration (Homebrew, local bins, opencode)
+    if ! grep -q 'brew shellenv' "$ZSHRC" 2>/dev/null; then
+        # Insert at the top of the file after any initial comments
+        TEMP_FILE=$(mktemp)
+        cat > "$TEMP_FILE" << 'EOF'
+# PATH configuration
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
+
+EOF
+        cat "$ZSHRC" >> "$TEMP_FILE"
+        mv "$TEMP_FILE" "$ZSHRC"
+        log_success "Added PATH config to .zshrc"
+    fi
+
     # NVM config
     if ! grep -q 'NVM_DIR' "$ZSHRC" 2>/dev/null; then
         cat >> "$ZSHRC" << 'EOF'
@@ -286,7 +300,21 @@ EOF
 }
 
 # ============================================================================
-# 11. AI TOOLS
+# 11. BUN
+# ============================================================================
+install_bun() {
+    log_info "Installing Bun..."
+
+    if [[ -f "$HOME/.bun/bin/bun" ]]; then
+        log_success "Bun already installed"
+    else
+        curl -fsSL https://bun.sh/install | bash
+        log_success "Bun installed"
+    fi
+}
+
+# ============================================================================
+# 12. AI TOOLS
 # ============================================================================
 install_ai_tools() {
     log_info "Installing AI tools..."
@@ -308,7 +336,7 @@ install_ai_tools() {
     fi
 
     # OpenCode
-    if command -v opencode &>/dev/null; then
+    if [[ -f "$HOME/.opencode/bin/opencode" ]]; then
         log_success "OpenCode already installed"
     else
         log_info "Installing OpenCode..."
@@ -317,7 +345,7 @@ install_ai_tools() {
 }
 
 # ============================================================================
-# 12. DOTFILES BARE REPO
+# 13. DOTFILES BARE REPO
 # ============================================================================
 setup_dotfiles_repo() {
     log_info "Setting up dotfiles bare repo..."
@@ -351,6 +379,7 @@ main() {
     install_oh_my_zsh
     configure_zshrc
     install_node
+    install_bun
     setup_neovim
     install_ai_tools
     setup_dotfiles_repo
