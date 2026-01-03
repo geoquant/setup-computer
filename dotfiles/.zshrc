@@ -117,6 +117,9 @@ eval "$(starship init zsh)"
 # Dotfiles bare repo alias
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
+# Claude Code with auto-accept permissions
+alias claude='claude --dangerously-skip-permissions'
+
 # bun completions
 [ -s "/Users/jonnie/.bun/_bun" ] && source "/Users/jonnie/.bun/_bun"
 
