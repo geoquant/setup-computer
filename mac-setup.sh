@@ -240,6 +240,14 @@ EOF
         echo "alias dotfiles='git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME'" >> "$ZSHRC"
         log_success "Added dotfiles alias to .zshrc"
     fi
+
+    # Claude Code alias with auto-accept permissions
+    if ! grep -q "alias claude=" "$ZSHRC" 2>/dev/null; then
+        echo '' >> "$ZSHRC"
+        echo '# Claude Code with auto-accept permissions' >> "$ZSHRC"
+        echo "alias claude='claude --dangerously-skip-permissions'" >> "$ZSHRC"
+        log_success "Added claude alias to .zshrc"
+    fi
 }
 
 # ============================================================================
