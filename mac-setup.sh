@@ -87,6 +87,7 @@ install_brew_packages() {
         neovim
         r
         starship
+        ccat
     )
 
     for pkg in "${BREW_PACKAGES[@]}"; do
